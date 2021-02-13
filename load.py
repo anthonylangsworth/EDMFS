@@ -12,6 +12,7 @@ from config import config, appname
 
 import edmfs
 import web_services
+from checklistbox import ChecklistBox
 
 this = sys.modules[__name__]
 this.plugin_name = "Minor Faction Activity Tracker"
@@ -56,6 +57,7 @@ def plugin_prefs(parent: myNotebook.Notebook, cmdr: str, is_beta: bool) -> Optio
     URL = "https://github.com/anthonylangsworth/EDMFAT"
     MISSION_WARNING = "This plug-in may not record some missions correctly due to Elite: Dangerous limitations."
     MISSION_WARNING_URL = "https://github.com/anthonylangsworth/EDMFAT/blob/master/doc/missions.md"
+    BACKGROUND = myNotebook.Label().cget("background")
 
     # known_minor_factions = {"EDA Kunti League", "Kunti Dragons", "LTT 2337 Empire Party", "HR 1597 & Co", "The Fuel Rats Mischief", "The Scovereign Justice League", "Hutton Orbital Truckers", "The Dark Wheel", "Edge Fraternity", "Colonia Citizens Network", "Mobius Colonial Republic Navy", "Tenjin Pioneers Colonia", "Knights of Colonial Karma", "Ed's 38"}
     known_minor_factions = set(itertools.chain.from_iterable(star_system.minor_factions for star_system in this.tracker.galaxy_state.systems.values()))
@@ -66,32 +68,38 @@ def plugin_prefs(parent: myNotebook.Notebook, cmdr: str, is_beta: bool) -> Optio
     frame.columnconfigure(1, weight=1) # Required for listbox scrollbar
 
     HyperlinkLabel(
-        frame, text=this.plugin_name, background=myNotebook.Label().cget("background"), url=URL, underline=True
+        frame, text=this.plugin_name, background=BACKGROUND, url=URL, underline=True
     ).grid(row=0, padx=PADX, pady=PADY, sticky=tk.W)
     myNotebook.Label(frame, text=VERSION).grid(row=0, column=3, padx=PADX, sticky=tk.E)
 
     myNotebook.Label(frame, text=INSTRUCTIONS, wraplength=500, justify=tk.LEFT, anchor=tk.W).grid(row=2, column=0, columnspan=8, padx=PADX, sticky=tk.W)
 
-    this.minor_faction_list = tk.Listbox(frame, selectmode="multiple", background="white")
+    # this.minor_faction_list = tk.Listbox(frame, selectmode="extended") # , background="red", foreground="blue", select)
+    # this.minor_faction_list.config(height=10, width=50)
+    # this.minor_faction_list.grid(row=5, column=0, sticky=tk.W, padx=(PADX, 0), pady=PADY)
+    # this.minor_faction_list.insert(tk.END, *known_minor_factions)
+
+    this.minor_faction_list = ChecklistBox(frame, known_minor_factions, this.tracker.minor_factions,
+        background=BACKGROUND, bd=1, relief="sunken")
     this.minor_faction_list.config(height=10, width=50)
     this.minor_faction_list.grid(row=5, column=0, sticky=tk.W, padx=(PADX, 0), pady=PADY)
-    this.minor_faction_list.insert(tk.END, *sorted(known_minor_factions))
+    # checklist = ChecklistBox(root, choices, bd=1, relief="sunken", background="white")
 
-    first_minor_faction_visible = False
     for minor_faction in this.tracker.minor_factions:
-        this.minor_faction_list.selection_set(known_minor_factions.index(minor_faction))
-        if not first_minor_faction_visible:
-            this.minor_faction_list.see(known_minor_factions.index(minor_faction))
-            first_minor_faction_visible = True
+        this.minor_faction_list.entries[minor_faction] = minor_faction
+        # this.minor_faction_list.selection_set(known_minor_factions.index(minor_faction))
+        # if not first_minor_faction_visible:
+        #     this.minor_faction_list.see(known_minor_factions.index(minor_faction))
+        #     first_minor_faction_visible = True
 
-    scrollbar = tk.Scrollbar(frame, orient=tk.VERTICAL)
-    scrollbar.config(command=this.minor_faction_list.yview)
-    scrollbar.grid(row=5, column=1, sticky=tk.NS + tk.W, pady=PADY)
+    # scrollbar = tk.Scrollbar(frame, orient=tk.VERTICAL)
+    # scrollbar.config(command=this.minor_faction_list.yview)
+    # scrollbar.grid(row=5, column=1, sticky=tk.NS + tk.W, pady=PADY)
 
-    this.minor_faction_list.config(yscrollcommand=scrollbar.set)
+    # this.minor_faction_list.config(yscrollcommand=scrollbar.set)
 
     HyperlinkLabel(
-        frame, text=MISSION_WARNING, background=myNotebook.Label().cget("background"), url=MISSION_WARNING_URL, underline=True
+        frame, text=MISSION_WARNING, background=BACKGROUND, url=MISSION_WARNING_URL, underline=True
     ).grid(row=7, column=0, columnspan=8, padx=PADX, pady=PADY, sticky=tk.W)
     
     return frame

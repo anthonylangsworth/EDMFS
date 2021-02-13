@@ -40,6 +40,12 @@
                         Type="string" Value="Installed" KeyPath="yes" />
                     <RemoveFile Id="RemoveResolversFile" Name="resolvers.py" On="uninstall" />
                 </Component>
+                <Component Id="checklistbox.py" Guid="ec7d44b4-8c3c-4cb9-aeba-8917b33087ac">
+                    <File Id="checklistbox.py" Source="..\checklistbox.py"/>
+                    <RegistryValue Root="HKCU" Key="Software\EDMFAT\EDMFAT\checklistbox.py"
+                        Type="string" Value="Installed" KeyPath="yes" />
+                    <RemoveFile Id="RemoveChecklistBoxFile" Name="checklistbox.py" On="uninstall" />
+                </Component>                
                 <Directory Id="EDMFATPyCacheFolder" Name="__pycache__" />
                 <Directory Id="edmfsFolder" Name="edmfs">
                     <Component Id="__init__.py" Guid="8cbb2ea1-fe63-4614-b201-2ed9ed60d31f">
@@ -98,6 +104,7 @@
         <Feature Id="DefaultFeature" Level="1">
             <ComponentRef Id="load.py" />
             <ComponentRef Id="web_services.py" />
+            <ComponentRef Id="checklistbox.py"/>
             <ComponentRef Id="__init__.py" />
             <ComponentRef Id="event_formatters.py" />
             <ComponentRef Id="event_processors.py" />
