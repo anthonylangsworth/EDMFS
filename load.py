@@ -83,10 +83,9 @@ def plugin_prefs(parent: myNotebook.Notebook, cmdr: str, is_beta: bool) -> Optio
         background=BACKGROUND, bd=1, relief="sunken")
     this.minor_faction_list.config(height=10, width=50)
     this.minor_faction_list.grid(row=5, column=0, sticky=tk.W, padx=(PADX, 0), pady=PADY)
-    # checklist = ChecklistBox(root, choices, bd=1, relief="sunken", background="white")
 
-    for minor_faction in this.tracker.minor_factions:
-        this.minor_faction_list.entries[minor_faction] = minor_faction
+    # for minor_faction in this.tracker.minor_factions:
+    #     this.minor_faction_list.entries[minor_faction] = minor_faction
         # this.minor_faction_list.selection_set(known_minor_factions.index(minor_faction))
         # if not first_minor_faction_visible:
         #     this.minor_faction_list.see(known_minor_factions.index(minor_faction))
